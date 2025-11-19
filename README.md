@@ -1,15 +1,15 @@
 # Tiny Transformer for English -> German Translation
 **AI Course Project - Track 1: TinyReproduction**
 
-This repository contains the final code for a **tiny reproduction** of th ecore ideas from **Attention Is All You Need** on an English -> German translation task.
+This repository contains the final code for a **tiny reproduction** of the core ideas from **Attention Is All You Need** on an English -> German translation task.
 
-The goal is *not* to reach state-of-the-art performance, but to **distill and verfiy** the behavior of a Transformer encoder-decoder on a small scale dataset, matching the spirit of Track 1 ("TinyReproduction") in the AI Course Project.
+The goal is *not* to reach state-of-the-art performance, but to **distill and verify** the behavior of a Transformer encoder-decoder on a small scale dataset, matching the spirit of Track 1 ("TinyReproduction") in the AI Course Project.
 
 The code is designed so that:
 
 - It **automatically downloads** the dataset via HuggingFace `datasets`.
 - It **trains a SentencePiece tokenizer from scratch**.
-- It trains a **small Transformer** with Noam-style learning rate warmujp and label smoothing.
+- It trains a **small Transformer** with Noam-style learning rate warmup and label smoothing.
 - It logs **loss and BLEU over time** and writes a compact **`final_metrics.json`** summary.
 - A separate script **recreates the plots** used in the report from the saved logs.
 
@@ -31,7 +31,7 @@ This folder contains only the files needed to reproduce the final experiments:
 └── README.md                             # This file
 ```
 
-During Training, the script will create an additional directory (not tracked by git):
+During training, the script will create an additional directory (not tracked by git):
 
 tiny_ckpt/
     spm.model
@@ -45,10 +45,10 @@ This directory is **not required** to exist beforehand; it will be created autom
 ## 2. Dependencies and Environment
 
 ### **Python**
-- Test with Python 3.11
-- Training runs on CPU or GPU (GPU strongly recommended by not required)
+- Tested with Python 3.11
+- Training runs on CPU or GPU (GPU strongly recommended but not required)
 
-### **Install dependencies
+### **Install dependencies**
 
 From this folder:
 pip install -r requirements.txt
@@ -60,13 +60,13 @@ the `requirements.txt` contains:
 - `evaluate` - BLEU computation via `sacrebleu`
 - `sentencepiece` - unigram subword tokenizer
 
-You may also need to follow PyTorch's official instructions for installing a GPU-enabled build if you wnat CUDA support.
+You may also need to follow PyTorch's official instructions for installing a GPU-enabled build if you want CUDA support.
 
 ## 3. Data and Tokenization
 
 The script uses HuggingFace `datasets` to load English -> German translation data:
 1. It first tries:
-    - load_dataset("iwslt2017, "iwslt2017-en-de")
+    - load_dataset("iwslt2017", "iwslt2017-en-de")
 2. if that fails, it falls back to `"iwslt2017-de-en"` and flips the direction to obtain EN -> DE pairs.
 
 If no validation/test splits are present, the script will create them via **train/validation/test splits** (10% / 10% as needed), so **no manual preprocessing is required**.
@@ -86,7 +86,7 @@ If `spm.model` does not exist, the script will **train a new tokenizer** automat
 
 ## 4. Model: Tiny Transformer Architecture
 
-The finla model is a small encoder-decoder Transformer closely following the originla "Attention Is All You Need" architecture, but with much smaller hyperparameters:
+The final model is a small encoder-decoder Transformer closely following the original "Attention Is All You Need" architecture, but with much smaller hyperparameters:
 - `d_model = 128`
 - `n_heads = 4`
 - `d_ff = 512`
@@ -95,11 +95,11 @@ The finla model is a small encoder-decoder Transformer closely following the ori
 - Shared/tied output embeddings with the decoder embedding
 - Sinusoidal positional encodings
 
-Key components (all implements in checkpointFinal_tiny_transformer.py)
+Key components (all implemented in checkpointFinal_tiny_transformer.py)
 
 - **PositionalEncoding**: sinusoidal positions added to token embeddings.
-- **MultiHeadAttention**: scaled dat-prodcut attention with masking support.
-- **EncoderLayer / DecodingLayer**:
+- **MultiHeadAttention**: scaled dot-prodcut attention with masking support.
+- **EncoderLayer / DecoderLayer**:
     - self-attention (plus cross-attention in the decoder)
     - residual connections
     - LayerNorm
@@ -112,14 +112,14 @@ Key components (all implements in checkpointFinal_tiny_transformer.py)
 
 The main entry point is:
 
-`python checlpointFinal_tiny_transformer.py`
+`python checkpointFinal_tiny_transformer.py`
 
 This will:
 1. Setup config and random seeds.
 2. Download and prepare the EN -> DE dataset (with fallback).
 3. Train or load the SentencePiece tokenizer.
-4. Contruct PyTorch `DataLoader`s for train/validation/test.
-5. Initializer the tiny Transformer on GPU (if available) or CPU.
+4. Construct PyTorch `DataLoader`s for train/validation/test.
+5. Initialize the tiny Transformer on GPU (if available) or CPU.
 6. Train for a fixed number of steps using:
     - AdamW optimizer
     - Noam warmup LR schedule
@@ -127,8 +127,8 @@ This will:
     - gradient clipping
 7. Every N steps (e.g., 400), evaluate on the validation set:
     - compute validation loss/token
-    - dervie perplexity
-    - compute SacreBLEU on teh validation split
+    - derive perplexity
+    - compute SacreBLEU on the validation split
     - save `best.pt` when validation loss improves
 8. At the end:
     - reload the best checkpoint
@@ -140,7 +140,7 @@ This will:
 
 Command-line options
 
-The script supports several flags (names may vary slighty depending on the final version):
+The script supports several flags (names may vary slightly depending on the final version):
 - `--profile`
     - Selects a model profile such as `"tiny"`, `"small"`, `"base"`.
     - For this project, `"tiny"` is the main profile of interest.
@@ -164,7 +164,7 @@ Example:
 After running `checkpointFinal_tiny_transformer.py`, you should see:
 
 ### 6.1 In the project root
-- `final_metrcis.json`
+- `final_metrics.json`
     - A json file containing key summary metrics for the final model (e.g., validation/test BLEU, perplexity, best step).
 - `loss_log.json`
     - A json log with fields such as:
@@ -183,7 +183,7 @@ These are used to generate the plots in the report.
 - `best.pt` - Best model weights (based on validation loss)
 - Possibly additional checkpoint-related files depending on training settings
 
-## 7. Reproducing Plots form the Report
+## 7. Reproducing Plots from the Report
 
 The script `graphs_for_slides.py` reads `loss_log.json` (and optionally `final_metrics.json`) and generates the plots used in the report (e.g., train/valid loss vs. steps, BLEU vs. steps).
 
@@ -198,12 +198,12 @@ This will:
 
 ## 8. Example Translation
 
-The pipeline also produces qualitative examples of translations (either written to a file or printed by `sample_translations.py), showing:
+The pipeline also produces qualitative examples of translations (either written to a file or printed by `sample_translations.py`), showing:
 - **SRC**: source English sentence
 - **PRED**: predicted German translation (using beam search)
 - **REF**: reference German translation
 
-These examples are used in the report to illustrate typical succes or errors of the tiny Transformer model.
+These examples are used in the report to illustrate typical success or errors of the tiny Transformer model.
 
 ## 9. Code Origin and Attribution
 
@@ -216,7 +216,7 @@ No functions were directly copy-pasted from external repositories without modifi
 
 ### 9.1 `checkpointFinal_tiny_transformer.py`
 - **Imports, configuration dataclass, and CLI parsing**
-    - Written by me, following common Pythong patterns (`argparse`, `dataclasses`).
+    - Written by me, following common Python patterns (`argparse`, `dataclasses`).
 - **Data loading and splitting (IWSLT-style EN↔DE with fallback)**
     - Written by me using the HuggingFace datasets API.
     - The logic to try `"iwslt2017-en-de"` first and then `"iwslt2017-de-en"` and flip directions was designed and implemented by me.
@@ -234,20 +234,20 @@ No functions were directly copy-pasted from external repositories without modifi
     - Written by me to follow the architecture in Vaswani et al. (2017).
     - While the structure reflects the standard Transformer components, the concrete code (naming, shape handling, masking conventions) was implemented and debugged by me for this tiny EN→DE setting.
 
-**Loss and scheduler** (`LabelSmoothingLoss`, `WarmupLR`)
-- Written by me, inspired by lecture material and the original paper’s description of label smoothing and the “Noam” learning rate schedule.
+- **Loss and scheduler** (`LabelSmoothingLoss`, `WarmupLR`)
+    - Written by me, inspired by lecture material and the original paper’s description of label smoothing and the “Noam” learning rate schedule.
 
-**Training loop, validation, checkpointing, logging, and JSON export**
-- Written by me.
-- This includes:
-    - how often validation is run,
-    - how metrics are aggregated,
-    - how `best.pt` is selected,
-    - and how `loss_log.json` / `final_metrics.json` are structured.
+- **Training loop, validation, checkpointing, logging, and JSON export**
+    - Written by me.
+    - This includes:
+        - how often validation is run,
+        - how metrics are aggregated,
+        - how `best.pt` is selected,
+        - and how `loss_log.json` / `final_metrics.json` are structured.
 
 - **Beam search decoding and BLEU evaluation** (`greedy_or_beam_search`, `evaluate_bleu`)
-- Written by me, using the `evaluate` library (`sacrebleu`) for BLEU computation.
-- The beam search logic (tracking log-probabilities, applying length penalty, selecting the best hypothesis) was implemented by me.
+    - Written by me, using the `evaluate` library (`sacrebleu`) for BLEU computation.
+    - The beam search logic (tracking log-probabilities, applying length penalty, selecting the best hypothesis) was implemented by me.
 
 **NOTE**: This final script is an evolution of earlier checkpoint scripts written for this course. All changes and extensions for the final submission (e.g., improved logging, tunable decoding, cleaner data handling) were implemented by me.
 
