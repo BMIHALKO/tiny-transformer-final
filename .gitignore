@@ -1,0 +1,11 @@
+tiny_ckpt/
+*.pt
+*.ckpt
+*.bin
+__pycache__/
+.venv/
+env/
+venv/
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/

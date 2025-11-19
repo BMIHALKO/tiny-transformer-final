@@ -1,0 +1,20 @@
+[1] SRC:  several years ago here at ted, peter skillman introduced a design challenge called the marshmallow challenge.
+     PRED: hier ist ein herausforderungs herausforderung, vor einigen jahren vor einigen jahre alt.
+     REF:  vor einigen jahren, hier bei ted, stellte peter skillman einen design-wettbewerb namens "die marshmallow-herausforderung" vor.
+
+[2] SRC:  and the idea's pretty simple: teams of four have to build the tallest free-standing structure out of 20 sticks of spaghetti, one yard of tape, one yard of string and a marshmallow.
+     PRED: und eines der idee ist: ein ziemlich einfacher struktur von marines der struktur des teams, ein ziemlich einfacher struktur der struktur der struktur des teams.
+     REF:  die idee ist ziemlich einfach. vierer-teams müssen die größtmögliche freistehende struktur mit 20 spaghetti, ca. 1m klebeband, ca. 1m faden und einem marshmallow bauen.
+
+[3] SRC:  the marshmallow has to be on top.
+     PRED: der marines ist der marinesstügst.
+     REF:  der marshmallow muss oben drauf sein.
+
+[4] SRC:  and, though it seems really simple, it's actually pretty hard because it forces people to collaborate very quickly.
+     PRED: und es scheint sehr einfach, dass es sehr einfachen menschen sehr einfach.
+     REF:  und, obwohl es wirklich einfach scheint, ist es tatsächlich richtig schwer, weil es leute drängt sehr schnell zusammenzuarbeiten.
+
+[5] SRC:  and so, i thought this was an interesting idea, and i incorporated it into a design workshop.
+     PRED: also dachte ich, dass es eine interessante idee, ich in eine idee, in eine idee war.
+     REF:  und so dachte ich, dass dies eine interessante idee ist und ich habe es in einen design-workshop verwandelt.
+
